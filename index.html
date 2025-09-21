@@ -326,14 +326,10 @@ sempre foi e sempre será você. 🙏🏼</div>
 
   <script>
     /* ---- CONFIGURAÇÃO ---- */
-    const mediaFiles = [];
-    for(let i=1;i<=39;i++){
-      // photo11 and photo36..photo39 are videos
-      if(i === 11 || i >= 36){
-        mediaFiles.push(`images/photo${i}.mp4`);
-      } else {
-        mediaFiles.push(`images/photo${i}.jpg`);
-      }
+    const TOTAL_PHOTOS = 35;
+    const images = [];
+    for(let i=1;i<=TOTAL_PHOTOS;i++){
+    images.push(`images/photo${i}.jpg`);
     }
     const MUSIC_PATH = 'music/song.mp3'; // coloque seu arquivo aqui
     /* ---- */
@@ -347,7 +343,6 @@ sempre foi e sempre será você. 🙏🏼</div>
 
     const gallery = document.getElementById('gallery');
     const mainPhoto = document.getElementById('mainPhoto');
-    const mainMediaContainer = document.getElementById('mainPhoto'); // reused for media
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const modal = document.getElementById('modal');
@@ -429,6 +424,7 @@ sempre foi e sempre será você. 🙏🏼</div>
 
     // Ativar slideshow automático
     autoplayCheckbox.checked = true;
+    if (slideInterval) clearInterval(slideInterval);
     slideInterval = setInterval(() => setMain(idx + 1), 3200);
 
     // Mostrar texto da carta
@@ -447,62 +443,20 @@ sempre foi e sempre será você. 🙏🏼</div>
     /* ---- GALLERY & SLIDESHOW ---- */
     function buildGallery(){
     gallery.innerHTML = '';
-    mediaFiles.forEach((src, i) => {
-    const isVideo = src.toLowerCase().endsWith('.mp4');
-    const el = document.createElement(isVideo ? 'video' : 'img');
-    el.src = src;
-    el.alt = `Mídia ${i+1}`;
-    if(!isVideo) el.loading = 'lazy';
-    el.dataset.index = i;
-    if(isVideo){
-      el.muted = true;
-      el.loop = true;
-      el.autoplay = true;
-      el.playsInline = true;
-      el.style.width = '100%';
-      el.style.height = 'auto';
-    } else {
-      el.style.width = '100%';
-      el.style.height = 'auto';
-      el.style.objectFit = 'cover';
-      el.style.borderRadius = '12px';
-      el.style.boxShadow = '0 10px 30px rgba(6,6,10,0.45)';
-      el.style.cursor = 'pointer';
-      el.style.transition = 'transform 220ms ease';
-      el.addEventListener('mouseenter', () => el.style.transform = 'translateY(-6px) scale(1.02)');
-      el.addEventListener('mouseleave', () => el.style.transform = 'none');
-    }
-    el.addEventListener('click', ()=> openModal(i));
-    gallery.appendChild(el);
+    images.forEach((src, i) => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `Foto ${i+1}`;
+    img.loading = 'lazy';
+    img.dataset.index = i;
+    img.addEventListener('click', ()=> openModal(i));
+    gallery.appendChild(img);
     });
     }
 
     function setMain(i){
-    idx = (i + mediaFiles.length) % mediaFiles.length;
-    const src = mediaFiles[idx];
-    const isVideo = src.toLowerCase().endsWith('.mp4');
-    // replace main photo container
-    const parent = document.getElementById('mainPhoto').parentElement;
-    parent.innerHTML = '';
-    if(isVideo){
-      const video = document.createElement('video');
-      video.src = src;
-      video.autoplay = true;
-      video.loop = true;
-      video.muted = true;
-      video.playsInline = true;
-      video.style.width = '100%';
-      video.style.height = '100%';
-      parent.appendChild(video);
-    } else {
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = 'Foto principal';
-      img.style.width = '100%';
-      img.style.height = '100%';
-      img.style.objectFit = 'cover';
-      parent.appendChild(img);
-    }
+    idx = (i + images.length) % images.length;
+    mainPhoto.src = images[idx];
     }
 
     prevBtn.addEventListener('click', ()=> setMain(idx-1));
@@ -539,6 +493,7 @@ sempre foi e sempre será você. 🙏🏼</div>
 
     autoplayCheckbox.addEventListener('change', (e)=>{
     if(e.target.checked){
+    if (slideInterval) clearInterval(slideInterval);
     slideInterval = setInterval(()=> setMain(idx+1), 3200);
     } else {
     clearInterval(slideInterval);
@@ -576,6 +531,11 @@ sempre foi e sempre será você. 🙏🏼</div>
     /* ---- INIT ---- */
     buildGallery();
     setMain(0);
+
+    // Iniciar slideshow automaticamente ao entrar no site
+    autoplayCheckbox.checked = true;
+    if (slideInterval) clearInterval(slideInterval);
+    slideInterval = setInterval(() => setMain(idx + 1), 3200);
 
     // Accessibility: if user navigates quickly and cover isn't needed, allow skipping (Escape)
     document.addEventListener('keydown', (e)=>{
