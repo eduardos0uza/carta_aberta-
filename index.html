@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carta para Priscila — De Eduardo</title>
+  <style>
+    :root{
+    --bg1: #0b0711;
+    --bg2: #2b1020;
+    --soft-pink: #ff6b8a;
+    --soft-peach: #ffd3b6;
+    --muted:#e7cfd8;
+    --glass: rgba(255,255,255,0.05);
+    --radius:18px;
+    --maxw:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+    margin:0;
+    min-height:100vh;
+    background:
+    radial-gradient(800px 300px at 12% 12%, rgba(255,107,138,0.06), transparent 6%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+    color:#fff;
+    font-family: "Georgia", "Palatino Linotype", Palatino, serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    justify-content:center;
+    padding:36px 18px;
+    overflow-x:hidden;
+    }
+    .wrap{width:100%; max-width:var(--maxw);}
+
+    header{ display:flex; gap:16px; align-items:center; margin-bottom:18px; z-index:2; }
+    .logo{ width:86px; height:86px; border-radius:20px;
+    background: linear-gradient(135deg,var(--soft-pink), var(--soft-peach));
+    display:flex; align-items:center; justify-content:center;
+    color:#2b0b10; font-size:30px; font-weight:900;
+    box-shadow: 0 14px 40px rgba(16,6,10,0.55);
+    }
+    h1{margin:0; font-size:22px}
+    p.lead{margin:4px 0 0; color:var(--muted); font-size:14px}
+
+    /* ---- COVER (tela inicial) ---- */
+    .cover {
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    background: linear-gradient(180deg, rgba(11,7,17,0.98), rgba(43,16,32,0.96));
+    color:white;
+    padding:20px;
+    flex-direction:column;
+    text-align:center;
+    transition: opacity 700ms cubic-bezier(.2,.9,.2,1), transform 700ms cubic-bezier(.2,.9,.2,1);
+    }
+    .cover.hidden {
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(-20px) scale(0.98);
+    }
+    .cover-card{
+    max-width:860px;
+    width:100%;
+    border-radius:20px;
+    padding:28px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    box-shadow: 0 30px 80px rgba(2,6,23,0.7);
+    backdrop-filter: blur(6px);
+    position:relative;
+    overflow:hidden;
+    }
+    .cover h2{
+    margin:0 0 6px 0;
+    font-family: "Brush Script MT", "Lucida Handwriting", cursive;
+    font-size:48px;
+    color:var(--soft-pink);
+    text-shadow: 0 6px 24px rgba(255,107,138,0.12);
+    }
+    .cover p{
+    margin:6px 0 18px 0;
+    color:var(--muted);
+    font-size:18px;
+    }
+    .open-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background: linear-gradient(135deg,var(--soft-pink), var(--soft-peach));
+    color:#25060a;
+    padding:12px 18px;
+    border-radius:12px;
+    font-weight:800;
+    font-size:16px;
+    border:none;
+    cursor:pointer;
+    box-shadow: 0 12px 30px rgba(255,107,138,0.18);
+    transform-origin:center;
+    }
+    .open-btn:active{ transform:translateY(2px) scale(.997); }
+
+    /* surprise burst (hearts + confetti) */
+    .burst {
+    position:absolute; inset:0; pointer-events:none; z-index:5;
+    }
+    .particle{
+    position:absolute;
+    width:14px; height:14px; opacity:0;
+    transform: translate3d(0,0,0) scale(0.8);
+    transition: transform 900ms cubic-bezier(.1,.7,.2,1), opacity 900ms;
+    }
+
+    /* ---- resto do site (mantém template romântico) ---- */
+    .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:18px; border-radius:var(--radius);
+    box-shadow: 0 18px 50px rgba(10,6,10,0.6);
+    backdrop-filter: blur(6px);
+    margin-bottom:18px;
+    }
+    .hero{ display:grid; grid-template-columns: 1fr 420px; gap:22px; align-items:start; z-index:1; }
+
+    .letter{ position:relative; padding:18px; border-radius:14px; background:var(--glass); overflow:hidden; }
+    .letter h2{ margin:0 0 10px 0; color:var(--soft-pink); font-family: "Brush Script MT", cursive; font-size:30px; }
+    .letter p{ margin:0; font-size:17px; color:#f6eef2; line-height:1.55; white-space:pre-wrap; }
+
+    .vignette{ position:absolute; inset:0; pointer-events:none; z-index:0;
+    background: radial-gradient(60% 40% at 10% 20%, rgba(255,211,182,0.06), transparent 10%),
+    radial-gradient(40% 25% at 90% 80%, rgba(255,107,138,0.04), transparent 8%); }
+
+    .side{display:flex; flex-direction:column; gap:12px;}
+    .profile{ display:flex; gap:12px; align-items:center; padding:12px; border-radius:12px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 10px 30px rgba(6,6,10,0.5); }
+    .avatar{ width:120px; height:120px; border-radius:12px; overflow:hidden; border:2px solid rgba(255,255,255,0.03); }
+    .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .btn{ background:transparent; color:var(--soft-pink); border:1px solid rgba(255,255,255,0.06);
+    padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700; }
+
+    .gallery{ column-count:3; column-gap:12px; }
+    .gallery img{ width:100%; margin:0 0 12px; display:block; border-radius:12px; object-fit:cover; box-shadow: 0 10px 30px rgba(6,6,10,0.45); cursor:pointer; transition: transform 220ms ease; }
+    .gallery img:hover{ transform: translateY(-6px) scale(1.02); }
+
+    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(6,6,10,0.78); z-index:9998; padding:20px; }
+    .modal.open{ display:flex; }
+    .modal .content{ width:min(92vw,1100px); height:min(88vh,820px); border-radius:12px; overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; background:#070707; }
+    .modal img{ max-width:100%; max-height:100%; object-fit:contain; display:block; }
+    .nav{ position:absolute; inset:0; display:flex; align-items:center; justify-content:space-between; pointer-events:none; }
+    .nav button{ pointer-events:auto; background:rgba(0,0,0,0.35); border:none; color:white; padding:12px 14px; margin:12px; border-radius:10px; cursor:pointer; font-size:18px; }
+
+    /* responsive */
+    @media (max-width:1040px){ .hero{ grid-template-columns: 1fr; } .gallery{ column-count:2; } .avatar{ width:96px; height:96px; } }
+    @media (max-width:640px){ .gallery{ column-count:1; } .avatar{ width:84px; height:84px; } }
+
+    footer{ margin-top:16px; color:var(--muted); font-size:13px; text-align:center; }
+
+
+  /* Carta styles: drop cap, signature, verso, fade-in */
+  .carta {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #f6eef2;
+    line-height: 1.6;
+  }
+  .carta h2 {
+    font-family: "Brush Script MT", "Lucida Handwriting", cursive;
+    color: #ff6b8a;
+    font-size: 36px;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.4px;
+  }
+  .carta p {
+    margin: 0 0 18px 0;
+    font-size: 17px;
+    white-space: pre-wrap;
+  }
+  .carta p::first-letter {
+    float: left;
+    font-size: 72px;
+    line-height: 0.75;
+    padding-right: 10px;
+    padding-top: 4px;
+    color: #ff6b8a;
+    font-weight:700;
+  }
+  .assinatura {
+    display:block;
+    margin-top:18px;
+    font-family: "Brush Script MT", "Lucida Handwriting", cursive;
+    font-size: 28px;
+    color: #ffd3b6;
+    text-align:right;
+  }
+  .verso {
+    margin-top:12px;
+    padding:12px 14px;
+    border-left: 3px solid rgba(255,107,138,0.18);
+    color: #ffeff4;
+    font-style: italic;
+    background: rgba(255,211,182,0.02);
+    border-radius:8px;
+  }
+  .carta { opacity:0; transform: translateY(8px); transition: opacity .6s ease, transform .6s ease; }
+  .carta.visible { opacity:1; transform: translateY(0); }
+
+
+  </style>
+</head>
+<body>
+  <!-- COVER / TELA INICIAL -->
+  <div class="cover" id="cover">
+    <div class="cover-card" role="dialog" aria-labelledby="coverTitle" aria-describedby="coverDesc">
+    <div class="burst" id="burst"></div>
+
+    <h2 id="coverTitle">Feliz aniversário, Vida!</h2>
+    <p id="coverDesc">Um presente feito com todo carinho — abra quando estiver pronta 💝</p>
+
+    <div style="display:flex; gap:12px; justify-content:center; margin-top:14px;">
+    <button class="open-btn" id="openBtn" aria-label="Abrir presente">🎁 Abrir presente</button>
+    <button class="open-btn" id="peekBtn" aria-label="Ver uma prévia" style="background:transparent;border:1px solid rgba(255,255,255,0.06); color:var(--soft-peach);">✨ Prévia</button>
+    </div>
+
+    <div style="font-size:13px; color:var(--muted); margin-top:12px;">De Eduardo, com todo amor.</div>
+    </div>
+  </div>
+
+  <!-- SITE PRINCIPAL -->
+  <div class="wrap" id="mainContent" aria-hidden="true" style="opacity:0; transform: translateY(8px); transition: opacity 700ms, transform 700ms;">
+    <header>
+    <div class="logo"><img src="images/logo.jpg" alt="E P" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
+    <div>
+    <h1>Carta aberta para você, vida! 🩵</h1>
+    <p class="lead">Feliz aniversário vida, reuni nossas melhores lembranças aqui.</p>
+    </div>
+    </header>
+
+    <main class="card hero" aria-labelledby="cartaTitle">
+    <section class="letter" aria-labelledby="cartaTitle">
+    <div class="vignette" aria-hidden="true"></div>
+
+    <div style="position:relative; z-index:2;">
+    <div class="carta" id="minhaCarta">
+    <h3></h3>
+    <p>
+Hoje é o seu aniversário, a pessoa mais importante da minha vida, e não tem como eu deixar de escrever. 
+Antes de tudo, parabéns, vida! Que o seu dia seja cheio de coisas boas.
+
+Mas eu não consigo fingir que está tudo normal. A verdade é que sinto a sua falta… sinto falta do seu abraço, da sua voz, da sua presença. Sinto falta de você por completo. A vida sem você perdeu o sentido. Fico vendo nossas fotos e vídeos o tempo todo, e cada lembrança só me lembra o quanto éramos incríveis juntos. E o quanto eu preciso de você.
+
+Não vou negar, eu queria estar aí agora, comemorando ao seu lado, virando o dia contigo e passando cada segundo desse momento especial junto de você. Queria que hoje fosse não só o seu aniversário, mas também um recomeço nosso.
+
+Talvez eu não saiba dizer da melhor forma, nem me expressar direito... mas o que eu mais quero é ter você de volta, tentar de novo e fazer dar certo de verdade. Porque pra mim você sempre foi, e sempre vai ser, o amor da minha vida.
+
+Feliz aniversário, Vida. E que a vida, de algum jeito, cruze os nossos caminhos novamente... Se Deus quiser!!! Estou orando e torcendo muito por isso. 🙏🏼
+
+Te amo até o infinito! 🩵
+    </p>
+
+    <div class="verso">Quero ter você de volta,
+tentar de novo, sem medo,
+porque o amor da minha vida
+sempre foi e sempre será você. 🙏🏼</div>
+
+    <span class="assinatura">— Eduardo</span>
+    </div>
+
+    <div class="controls" style="margin-top:14px; display:flex; gap:12px; align-items:center;">
+    <label style="display:flex; align-items:center; gap:8px; color:var(--muted)">
+    <input type="checkbox" id="autoplay"> Slideshow automático
+    </label>
+    <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+    <button class="btn" id="playMusicBtn" title="Tocar / Pausar música">▶︎ Música</button>
+    <label style="color:var(--muted); display:flex; align-items:center; gap:6px;">
+    Volume
+    <input id="volume" type="range" min="0" max="1" step="0.01" value="0.6" style="width:110px;">
+    </label>
+    <button class="btn" id="printBtn" title="Imprimir/Salvar carta">Salvar</button>
+    </div>
+    </div>
+    </div>
+    </section>
+
+    <aside class="side" aria-label="Galeria e controles">
+    <div class="profile">
+    <div class="avatar"><img id="mainPhoto" src="images/photo1.jpg" alt="Nossa foto principal"></div>
+    <div>
+    <div style="font-weight:800">Para você</div>
+    <div class="meta">Aniversário • Te Amo!</div>
+    <div class="actions">
+    <button class="btn" id="prevBtn">◀</button>
+    <button class="btn" id="nextBtn">▶</button>
+    </div>
+    </div>
+    </div>
+
+    <div class="card" style="padding:12px;">
+    <div style="font-weight:700; margin-bottom:6px; color:var(--muted)">Galeria</div>
+    <div id="gallery" class="gallery" aria-live="polite"></div>
+    </div>
+    </aside>
+    </main>
+
+    <footer class="card">
+    <small>Te amo até o infinito! 🩵</small>
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="modal" id="modal" role="dialog" aria-hidden="true">
+    <div class="content" id="modalContent">
+    <img id="modalImg" src="" alt="Foto ampliada">
+    <div class="nav" aria-hidden="false">
+    <button id="prevModal" title="Anterior">◀</button>
+    <div style="flex:1"></div>
+    <button id="closeModal" title="Fechar">✕</button>
+    <button id="nextModal" title="Próximo">▶</button>
+    </div>
+    </div>
+  </div>
+
+  <audio id="bgAudio" loop preload="auto"></audio>
+
+  <script>
+    /* ---- CONFIGURAÇÃO ---- */
+    const mediaFiles = [];
+    for(let i=1;i<=39;i++){
+      // photo11 and photo36..photo39 are videos
+      if(i === 11 || i >= 36){
+        mediaFiles.push(`images/photo${i}.mp4`);
+      } else {
+        mediaFiles.push(`images/photo${i}.jpg`);
+      }
+    }
+    const MUSIC_PATH = 'music/song.mp3'; // coloque seu arquivo aqui
+    /* ---- */
+
+    // Elementos UI
+    const cover = document.getElementById('cover');
+    const openBtn = document.getElementById('openBtn');
+    const peekBtn = document.getElementById('peekBtn');
+    const burst = document.getElementById('burst');
+    const mainContent = document.getElementById('mainContent');
+
+    const gallery = document.getElementById('gallery');
+    const mainPhoto = document.getElementById('mainPhoto');
+    const mainMediaContainer = document.getElementById('mainPhoto'); // reused for media
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    const prevModal = document.getElementById('prevModal');
+    const nextModal = document.getElementById('nextModal');
+    const closeModal = document.getElementById('closeModal');
+    const autoplayCheckbox = document.getElementById('autoplay');
+    const playMusicBtn = document.getElementById('playMusicBtn');
+    const volumeControl = document.getElementById('volume');
+    const printBtn = document.getElementById('printBtn');
+    const bgAudio = document.getElementById('bgAudio');
+
+    let idx = 0;
+    let slideInterval = null;
+    let musicPlaying = false;
+
+    /* ---- COVER ACTIONS ---- */
+    function createParticle(x,y,color,kind){
+    const el = document.createElement('div');
+    el.className = 'particle';
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    if(kind === 'heart'){
+    el.innerHTML = `<svg viewBox="0 0 32 29" width="100%" height="100%" fill="${color}"><path d="M23.6 0C20.9 0 18.6 1.6 16 4.1 13.4 1.6 11.1 0 8.4 0 3.7 0 0 3.7 0 8.4 0 18.9 16 29 16 29s16-10.1 16-20.6C32 3.7 28.3 0 23.6 0z"></path></svg>`;
+    } else {
+    el.style.background = color;
+    el.style.borderRadius = Math.random()>0.5? '2px':'50%';
+    }
+    burst.appendChild(el);
+    // animate outward
+    requestAnimationFrame(()=>{
+    const angle = (Math.random()*Math.PI*2);
+    const dist = 120 + Math.random()*200;
+    const tx = Math.cos(angle)*dist;
+    const ty = -Math.abs(Math.sin(angle))* (60 + Math.random()*160) - 20;
+    el.style.opacity = 1;
+    el.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${1+Math.random()*0.6}) rotate(${Math.random()*160-80}deg)`;
+    });
+    // remove after animation
+    setTimeout(()=> el.remove(), 1400 + Math.random()*800);
+    }
+
+    function burstConfetti(centerX, centerY){
+    const colors = ['#ff6b8a','#ffd3b6','#ffe8f0','#ffd1e0','#ffd9b8','#ff9fb3'];
+    for(let i=0;i<28;i++){
+    const kind = Math.random() > 0.6 ? 'heart' : 'dot';
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    createParticle(centerX + (Math.random()*40-20), centerY + (Math.random()*40-20), color, kind);
+    }
+    }
+
+    function openGift(startType='full'){
+    // Start music on user gesture
+    if(bgAudio.src === '' ) bgAudio.src = MUSIC_PATH;
+    bgAudio.volume = parseFloat(volumeControl.value || 0.6);
+    bgAudio.play().then(()=> {
+    musicPlaying = true;
+    playMusicBtn.textContent = '⏸ Música';
+    }).catch(()=> {
+    // autoplay blocked, user already clicked so usually ok
+    musicPlaying = false;
+    playMusicBtn.textContent = '▶︎ Música';
+    });
+
+    // play burst animation at center of cover card
+    const rect = cover.querySelector('.cover-card').getBoundingClientRect();
+    const cx = rect.left + rect.width/2;
+    const cy = rect.top + rect.height/2;
+    burstConfetti(cx,cy);
+
+    // hide cover after short delay to show burst
+    setTimeout(()=>{
+    cover.classList.add('hidden');
+    // reveal main content
+    mainContent.setAttribute('aria-hidden','false');
+    mainContent.style.opacity = 1;
+    mainContent.style.transform = 'translateY(0)';
+
+    // Ativar slideshow automático
+    autoplayCheckbox.checked = true;
+    slideInterval = setInterval(() => setMain(idx + 1), 3200);
+
+    // Mostrar texto da carta
+    document.getElementById('minhaCarta').classList.add('visible');
+
+    }, 680);
+    }
+
+    openBtn.addEventListener('click', ()=> openGift('full'));
+    peekBtn.addEventListener('click', ()=> {
+    // small preview: small burst and peek (don't autoplay music)
+    const rect = cover.querySelector('.cover-card').getBoundingClientRect();
+    burstConfetti(rect.left + rect.width/2, rect.top + rect.height/2);
+    });
+
+    /* ---- GALLERY & SLIDESHOW ---- */
+    function buildGallery(){
+    gallery.innerHTML = '';
+    mediaFiles.forEach((src, i) => {
+    const isVideo = src.toLowerCase().endsWith('.mp4');
+    const el = document.createElement(isVideo ? 'video' : 'img');
+    el.src = src;
+    el.alt = `Mídia ${i+1}`;
+    if(!isVideo) el.loading = 'lazy';
+    el.dataset.index = i;
+    if(isVideo){
+      el.muted = true;
+      el.loop = true;
+      el.autoplay = true;
+      el.playsInline = true;
+      el.style.width = '100%';
+      el.style.height = 'auto';
+    } else {
+      el.style.width = '100%';
+      el.style.height = 'auto';
+      el.style.objectFit = 'cover';
+      el.style.borderRadius = '12px';
+      el.style.boxShadow = '0 10px 30px rgba(6,6,10,0.45)';
+      el.style.cursor = 'pointer';
+      el.style.transition = 'transform 220ms ease';
+      el.addEventListener('mouseenter', () => el.style.transform = 'translateY(-6px) scale(1.02)');
+      el.addEventListener('mouseleave', () => el.style.transform = 'none');
+    }
+    el.addEventListener('click', ()=> openModal(i));
+    gallery.appendChild(el);
+    });
+    }
+
+    function setMain(i){
+    idx = (i + mediaFiles.length) % mediaFiles.length;
+    const src = mediaFiles[idx];
+    const isVideo = src.toLowerCase().endsWith('.mp4');
+    // replace main photo container
+    const parent = document.getElementById('mainPhoto').parentElement;
+    parent.innerHTML = '';
+    if(isVideo){
+      const video = document.createElement('video');
+      video.src = src;
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.style.width = '100%';
+      video.style.height = '100%';
+      parent.appendChild(video);
+    } else {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Foto principal';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      parent.appendChild(img);
+    }
+    }
+
+    prevBtn.addEventListener('click', ()=> setMain(idx-1));
+    nextBtn.addEventListener('click', ()=> setMain(idx+1));
+    mainPhoto.addEventListener('click', ()=> openModal(idx));
+
+    function openModal(i){
+    idx = (i + images.length) % images.length;
+    modalImg.src = images[idx];
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    }
+    prevModal.addEventListener('click', ()=> openModal(idx-1));
+    nextModal.addEventListener('click', ()=> openModal(idx+1));
+    closeModal.addEventListener('click', closeLightbox);
+    modal.addEventListener('click', (e)=> { if(e.target === modal) closeLightbox(); });
+
+    document.addEventListener('keydown', (e)=> {
+    if(modal.classList.contains('open')){
+    if(e.key === 'ArrowRight') openModal(idx+1);
+    if(e.key === 'ArrowLeft') openModal(idx-1);
+    if(e.key === 'Escape') closeLightbox();
+    } else {
+    if(e.key === 'ArrowRight') setMain(idx+1);
+    if(e.key === 'ArrowLeft') setMain(idx-1);
+    }
+    });
+
+    autoplayCheckbox.addEventListener('change', (e)=>{
+    if(e.target.checked){
+    slideInterval = setInterval(()=> setMain(idx+1), 3200);
+    } else {
+    clearInterval(slideInterval);
+    slideInterval = null;
+    }
+    });
+
+    /* ---- MUSIC CONTROLS ---- */
+    bgAudio.src = MUSIC_PATH;
+    bgAudio.volume = parseFloat(volumeControl.value);
+    function toggleMusic(){
+    if(!musicPlaying){
+    bgAudio.play().then(()=> {
+    musicPlaying = true;
+    playMusicBtn.textContent = '⏸ Música';
+    }).catch(()=> {
+    musicPlaying = false;
+    playMusicBtn.textContent = '▶︎ Música';
+    alert('Clique novamente para permitir a reprodução da música no navegador.');
+    });
+    } else {
+    bgAudio.pause();
+    musicPlaying = false;
+    playMusicBtn.textContent = '▶︎ Música';
+    }
+    }
+    playMusicBtn.addEventListener('click', toggleMusic);
+    volumeControl.addEventListener('input', (e)=> {
+    bgAudio.volume = parseFloat(e.target.value);
+    });
+
+    /* ---- PRINT ---- */
+    printBtn.addEventListener('click', ()=> window.print());
+
+    /* ---- INIT ---- */
+    buildGallery();
+    setMain(0);
+
+    // Accessibility: if user navigates quickly and cover isn't needed, allow skipping (Escape)
+    document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && !cover.classList.contains('hidden')){
+    // treat as opening the gift (without burst)
+    openGift('skip');
+    }
+    });
+
+    // Performance note: se as imagens forem muito grandes, converta para webp/comprima.
+  </script>
+</body>
+</html>
